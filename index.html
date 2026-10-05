@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pirin Perkakas Cash Flow</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #222;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    header {
+      background: #1f2937;
+      color: white;
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      margin-bottom: 6px;
+    }
+
+    header p {
+      color: #d1d5db;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .card h3 {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .section {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .section h2 {
+      margin-bottom: 15px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    input,
+    select,
+    button {
+      padding: 11px;
+      border-radius: 7px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: #2563eb;
+      color: white;
+      font-weight: bold;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .btn-danger {
+      background: #dc2626;
+      padding: 7px 10px;
+      font-size: 13px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 12px 8px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+    }
+
+    th {
+      background: #f8fafc;
+    }
+
+    .masuk {
+      color: #16a34a;
+      font-weight: bold;
+    }
+
+    .keluar {
+      color: #dc2626;
+      font-weight: bold;
+    }
+
+    .empty {
+      text-align: center;
+      color: #777;
+      padding: 20px;
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding: 10px;
+      }
+
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-group.full {
+        grid-column: auto;
+      }
+
+      table {
+        font-size: 13px;
+      }
+
+      th,
+      td {
+        padding: 8px 5px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <header>
+      <h1>Pirin Perkakas Cash Flow</h1>
+      <p>Pencatatan keuangan sederhana</p>
+    </header>
+
+    <div class="dashboard">
+
+      <div class="card">
+        <h3>Total Uang Masuk</h3>
+        <p id="totalMasuk">Rp0</p>
+      </div>
+
+      <div class="card">
+        <h3>Total Uang Keluar</h3>
+        <p id="totalKeluar">Rp0</p>
+      </div>
+
+      <div class="card">
+        <h3>Saldo</h3>
+        <p id="saldo">Rp0</p>
+      </div>
+
+    </div>
+
+    <div class="section">
+
+      <h2>Tambah Transaksi</h2>
+
+      <form id="formTransaksi">
+
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label for="tanggal">Tanggal</label>
+            <input type="date" id="tanggal" required>
+          </div>
+
+          <div class="form-group">
+            <label for="jenis">Jenis Transaksi</label>
+            <select id="jenis" required>
+              <option value="">Pilih jenis</option>
+              <option value="masuk">Uang Masuk</option>
+              <option value="keluar">Uang Keluar</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="nominal">Nominal</label>
+            <input
+              type="number"
+              id="nominal"
+              min="1"
+              placeholder="Contoh: 100000"
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="keterangan">Keterangan</label>
+            <input
+              type="text"
+              id="keterangan"
+              placeholder="Contoh: Penjualan barang"
+              required
+            >
+          </div>
+
+          <div class="form-group full">
+            <button type="submit">Simpan Transaksi</button>
+          </div>
+
+        </div>
+
+      </form>
+
+    </div>
+
+    <div class="section">
+
+      <h2>Riwayat Transaksi</h2>
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Tanggal</th>
+            <th>Jenis</th>
+            <th>Keterangan</th>
+            <th>Nominal</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+
+        <tbody id="daftarTransaksi"></tbody>
+
+      </table>
+
+      <div id="pesanKosong" class="empty">
+        Belum ada transaksi.
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    let transaksi = JSON.parse(
+      localStorage.getItem("pirinCashFlow")
+    ) || [];
+
+    const form = document.getElementById("formTransaksi");
+    const tanggal = document.getElementById("tanggal");
+    const jenis = document.getElementById("jenis");
+    const nominal = document.getElementById("nominal");
+    const keterangan = document.getElementById("keterangan");
+
+    const totalMasuk = document.getElementById("totalMasuk");
+    const totalKeluar = document.getElementById("totalKeluar");
+    const saldo = document.getElementById("saldo");
+    const daftarTransaksi = document.getElementById("daftarTransaksi");
+    const pesanKosong = document.getElementById("pesanKosong");
+
+    function formatRupiah(angka) {
+      return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0
+      }).format(angka);
+    }
+
+    function simpanData() {
+      localStorage.setItem(
+        "pirinCashFlow",
+        JSON.stringify(transaksi)
+      );
+    }
+
+    function updateDashboard() {
+      let masuk = 0;
+      let keluar = 0;
+
+      transaksi.forEach(item => {
+        if (item.jenis === "masuk") {
+          masuk += item.nominal;
+        } else {
+          keluar += item.nominal;
+        }
+      });
+
+      totalMasuk.textContent = formatRupiah(masuk);
+      totalKeluar.textContent = formatRupiah(keluar);
+      saldo.textContent = formatRupiah(masuk - keluar);
+    }
+
+    function tampilkanTransaksi() {
+      daftarTransaksi.innerHTML = "";
+
+      if (transaksi.length === 0) {
+        pesanKosong.style.display = "block";
+        return;
+      }
+
+      pesanKosong.style.display = "none";
+
+      transaksi
+        .slice()
+        .reverse()
+        .forEach(item => {
+
+          const row = document.createElement("tr");
+
+          row.innerHTML = `
+            <td>${item.tanggal}</td>
+            <td class="${item.jenis}">
+              ${item.jenis === "masuk" ? "Masuk" : "Keluar"}
+            </td>
+            <td>${item.keterangan}</td>
+            <td>${formatRupiah(item.nominal)}</td>
+            <td>
+              <button
+                class="btn-danger"
+                onclick="hapusTransaksi(${item.id})"
+              >
+                Hapus
+              </button>
+            </td>
+          `;
+
+          daftarTransaksi.appendChild(row);
+        });
+    }
+
+    function hapusTransaksi(id) {
+      const yakin = confirm("Hapus transaksi ini?");
+
+      if (!yakin) return;
+
+      transaksi = transaksi.filter(item => item.id !== id);
+
+      simpanData();
+      tampilkanTransaksi();
+      updateDashboard();
+    }
+
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const data = {
+        id: Date.now(),
+        tanggal: tanggal.value,
+        jenis: jenis.value,
+        nominal: Number(nominal.value),
+        keterangan: keterangan.value.trim()
+      };
+
+      if (
+        !data.tanggal ||
+        !data.jenis ||
+        data.nominal <= 0 ||
+        !data.keterangan
+      ) {
+        alert("Lengkapi semua data transaksi.");
+        return;
+      }
+
+      transaksi.push(data);
+
+      simpanData();
+      tampilkanTransaksi();
+      updateDashboard();
+
+      form.reset();
+
+      tanggal.valueAsDate = new Date();
+    });
+
+    tanggal.valueAsDate = new Date();
+
+    tampilkanTransaksi();
+    updateDashboard();
+  </script>
+
+</body>
+</html>
